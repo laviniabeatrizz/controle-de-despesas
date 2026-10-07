@@ -1,227 +1,147 @@
-// ---------- DADOS (ficam só na memória) ----------
-let despesas = [];
-let proximoId = 1;
+Controle de Despesas Pessoais
 
-const dadosIniciais = [
-  { id: 1, descricao: "Almoço", valor: 25.5, categoria: "Alimentação", pagamento: "Pix", status: "Pago", data: "2026-10-01" },
-  { id: 2, descricao: "Conta de luz", valor: 120, categoria: "Contas", pagamento: "Cartão", status: "Pendente", data: "2026-10-05" }
-];
+Identificação
 
-// Valores permitidos (usados na validação)
-const categorias = ["Alimentação", "Transporte", "Lazer", "Contas"];
-const pagamentos = ["Dinheiro", "Pix", "Cartão"];
-const statusValidos = ["Pendente", "Pago"];
+Nome do projeto: Controle de Despesas Pessoais
+Integrantes: Lavínia Beatriz
+Disciplina: Programação Web
+Unidade: I (front-end)
+Turma: [coloque sua turma aqui]
 
-// ---------- ASSÍNCRONO: simula o carregamento inicial ----------
-function carregarDespesas() {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(dadosIniciais), 1000);
-  });
-}
+Descrição
 
-async function iniciar() {
-  try {
-    const dados = await carregarDespesas();
-    despesas = dados;
-    proximoId = dados.length + 1;
-    document.getElementById("carregando").hidden = true;
-    document.getElementById("dashboard").hidden = false;
-    document.getElementById("listagem").hidden = false;
-    atualizarTela();
-  } catch (erro) {
-    document.getElementById("carregando").textContent = "Erro ao carregar despesas.";
-  }
-}
+O sistema resolve o problema de controlar gastos pessoais de forma simples. O usuário registra suas despesas, informa valor, categoria, forma de pagamento, status e data, e consegue visualizar um resumo do que já foi pago e do que ainda está pendente.
 
-// ---------- DASHBOARD ----------
-function atualizarDashboard() {
-  const pendentes = despesas.filter((d) => d.status === "Pendente").length;
-  const pagas = despesas.filter((d) => d.status === "Pago").length;
-  document.getElementById("total").textContent = despesas.length;
-  document.getElementById("pendentes").textContent = pendentes;
-  document.getElementById("pagas").textContent = pagas;
-}
+O público-alvo são pessoas que querem organizar melhor o dinheiro no dia a dia, sem precisar de planilhas complicadas.
 
-// ---------- LISTAGEM + BUSCA/FILTRO ----------
-function formatarValor(v) {
-  return "R$ " + Number(v).toFixed(2).replace(".", ",");
-}
+A aplicação roda inteiramente no navegador. Os dados ficam em memória, pois o foco da avaliação é o domínio de HTML, CSS e JavaScript.
 
-function criarBotao(texto, acao, id) {
-  const botao = document.createElement("button");
-  botao.type = "button";
-  botao.textContent = texto;
-  botao.dataset.acao = acao;
-  botao.dataset.id = id;
-  return botao;
-}
+Funcionalidades
 
-function renderizarLista() {
-  const busca = document.getElementById("busca").value.toLowerCase();
-  const filtro = document.getElementById("filtro-status").value;
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "";
+Dashboard com total de despesas, pendentes e pagas, calculado dinamicamente pelo JavaScript.
+Cadastro de novas despesas com validação em JavaScript.
+Listagem de despesas em formato de cards.
+Busca textual por descrição.
+Filtro por status (Pendente ou Pago).
+Alteração de status com um clique.
+Visualização de detalhes completos de uma despesa.
+Carregamento inicial assíncrono simulando busca de dados.
 
-  const visiveis = despesas.filter((d) => {
-    const combinaTexto = d.descricao.toLowerCase().includes(busca);
-    const combinaStatus = filtro === "" || d.status === filtro;
-    return combinaTexto && combinaStatus;
-  });
+Tecnologias
 
-  if (visiveis.length === 0) {
-    const vazio = document.createElement("li");
-    vazio.textContent = "Nenhuma despesa encontrada.";
-    lista.appendChild(vazio);
-    return;
-  }
+HTML5 para a estrutura semântica da página.
+CSS3 para layout, cores, espaçamento e responsividade.
+JavaScript para comportamento, DOM, eventos, validação e programação assíncrona.
+Git e GitHub para versionamento e hospedagem do código.
 
-  visiveis.forEach((d) => {
-    const item = document.createElement("li");
-    item.className = d.status.toLowerCase();
+Não foi utilizada nenhuma biblioteca ou framework externo. Tudo foi feito com HTML, CSS e JavaScript puros, conforme pedido no enunciado.
 
-    const titulo = document.createElement("strong");
-    titulo.textContent = d.descricao;
+Estrutura do projeto
 
-    const resumo = document.createElement("p");
-    resumo.textContent = formatarValor(d.valor) + " — " + d.status;
+controle-de-despesas/
+  index.html          -> estrutura da página
+  css/
+    style.css         -> estilos e responsividade
+  js/
+    app.js            -> lógica, DOM, eventos, validação e async
+  README.md           -> documentação do projeto
 
-    const textoStatus = d.status === "Pendente" ? "Marcar como pago" : "Marcar como pendente";
+O index.html contém o header, o dashboard, o formulário de cadastro, a listagem, a seção de detalhes e o footer.
+O css/style.css cuida da apresentação, incluindo foco visível e layout responsivo.
+O js/app.js contém os dados em memória, as funções de renderização, validação, eventos e o carregamento assíncrono.
 
-    item.appendChild(titulo);
-    item.appendChild(resumo);
-    item.appendChild(criarBotao(textoStatus, "status", d.id));
-    item.appendChild(criarBotao("Ver detalhes", "detalhes", d.id));
+Como executar
 
-    lista.appendChild(item);
-  });
-}
+1. Baixe ou clone o repositório:
+   git clone https://github.com/laviniabeatrizz/controle-de-despesas.git
 
-function atualizarTela() {
-  atualizarDashboard();
-  renderizarLista();
-}
+2. Abra a pasta do projeto.
 
-// ---------- VALIDAÇÃO ----------
-function mostrarErro(campo, mensagem) {
-  document.getElementById("erro-" + campo).textContent = mensagem;
-}
+3. Dê um duplo clique em index.html ou abra com o navegador de sua preferência.
 
-function validar() {
-  let valido = true;
+4. A aplicação já estará funcionando. Aguarde 1 segundo para o carregamento inicial das despesas.
 
-  const descricao = document.getElementById("descricao").value.trim();
-  const valor = document.getElementById("valor").value;
-  const categoria = document.getElementById("categoria").value;
-  const pagamento = document.getElementById("pagamento").value;
-  const status = document.getElementById("status").value;
-  const data = document.getElementById("data").value;
+Não é necessário instalar nada, nem rodar servidor. Basta abrir o index.html.
 
-  ["descricao", "valor", "categoria", "pagamento", "status", "data"].forEach((c) => mostrarErro(c, ""));
+Histórico de desenvolvimento
 
-  if (descricao === "") {
-    mostrarErro("descricao", "Informe a descrição.");
-    valido = false;
-  } else if (descricao.length < 3) {
-    mostrarErro("descricao", "A descrição precisa ter pelo menos 3 letras.");
-    valido = false;
-  }
+O projeto foi dividido em etapas:
 
-  if (valor === "" || Number(valor) <= 0) {
-    mostrarErro("valor", "Informe um valor maior que zero.");
-    valido = false;
-  }
+1. Estrutura HTML: criação do header, dashboard, formulário, listagem e detalhes.
+2. Estilos CSS: layout, cores, responsividade e foco visível.
+3. Lógica JavaScript: dados em memória, renderização da lista e do dashboard.
+4. Validação: checagem dos campos do formulário com mensagens de erro.
+5. Busca e filtro: filtragem dinâmica por descrição e status.
+6. Detalhes e alteração de status: interação com os cards da listagem.
+7. Programação assíncrona: simulação de carregamento inicial com Promise e async/await.
 
-  if (!categorias.includes(categoria)) {
-    mostrarErro("categoria", "Escolha uma categoria.");
-    valido = false;
-  }
+Branches utilizadas:
 
-  if (!pagamentos.includes(pagamento)) {
-    mostrarErro("pagamento", "Escolha a forma de pagamento.");
-    valido = false;
-  }
+main, versão estável.
+feature/formulario.
+feature/listagem.
+feature/filtros.
+feature/dashboard.
 
-  if (!statusValidos.includes(status)) {
-    mostrarErro("status", "Escolha o status.");
-    valido = false;
-  }
+Principais decisões: usar cards em vez de tabela, separar a renderização da lógica dos dados e manter a validação no JavaScript, como pedido no enunciado.
 
-  if (data === "") {
-    mostrarErro("data", "Informe a data.");
-    valido = false;
-  }
+Dificuldades encontradas: fazer a delegação de eventos funcionar corretamente nos botões gerados dinamicamente e manter a interface atualizada sem recarregar a página.
 
-  return valido;
-}
+Decisões técnicas
 
-// ---------- DETALHES ----------
-function mostrarDetalhes(despesa) {
-  const dl = document.getElementById("detalhes-lista");
-  dl.innerHTML = "";
+1. Cards em vez de tabela. Em telas pequenas, cards se adaptam melhor e são mais fáceis de ler. Cada despesa tem seu próprio bloco com informações e botões.
 
-  const campos = [
-    ["Descrição", despesa.descricao],
-    ["Valor", formatarValor(despesa.valor)],
-    ["Categoria", despesa.categoria],
-    ["Pagamento", despesa.pagamento],
-    ["Status", despesa.status],
-    ["Data", despesa.data]
-  ];
+2. Validação no JavaScript. O enunciado pede que a validação não dependa apenas do atributo required do HTML. Além disso, validar no JavaScript permite mensagens de erro personalizadas e controle total do fluxo.
 
-  campos.forEach(([termo, valor]) => {
-    const dt = document.createElement("dt");
-    dt.textContent = termo;
+3. Renderização separada da lógica dos dados. As funções renderizarLista e atualizarDashboard apenas leem o array de despesas e atualizam o DOM. Isso facilita manutenção e evita misturar regra de negócio com interface.
 
-    const dd = document.createElement("dd");
-    dd.textContent = valor;
+4. Delegação de eventos. Em vez de adicionar um listener em cada botão da lista, foi adicionado um único listener na lista. Isso funciona mesmo para botões criados depois e deixa o código mais limpo.
 
-    dl.appendChild(dt);
-    dl.appendChild(dd);
-  });
+Programação assíncrona
 
-  document.getElementById("detalhes").hidden = false;
-}
+1. Onde existe programação assíncrona?
+Na função carregarDespesas, chamada por iniciar.
 
-// ---------- EVENTOS ----------
-document.getElementById("formulario").addEventListener("submit", (evento) => {
-  evento.preventDefault();
-  if (!validar()) return;
+2. Qual operação ela representa?
+Representa a busca inicial das despesas. Como não há servidor, a operação é simulada com setTimeout de 1 segundo.
 
-  despesas.push({
-    id: proximoId++,
-    descricao: document.getElementById("descricao").value.trim(),
-    valor: Number(document.getElementById("valor").value),
-    categoria: document.getElementById("categoria").value,
-    pagamento: document.getElementById("pagamento").value,
-    status: document.getElementById("status").value,
-    data: document.getElementById("data").value
-  });
+3. Onde são utilizados Promise, async e await?
+Promise: dentro de carregarDespesas, que retorna uma promessa resolvida após 1 segundo.
+async: na função iniciar, declarada como async function.
+await: dentro de iniciar, esperando o resultado de carregarDespesas.
 
-  evento.target.reset();
-  atualizarTela();
-});
+4. O que aparece na interface enquanto a operação está sendo realizada?
+Aparece a mensagem "Carregando despesas..." no elemento carregando, que depois é escondido quando os dados chegam.
 
-document.getElementById("busca").addEventListener("input", renderizarLista);
-document.getElementById("filtro-status").addEventListener("change", renderizarLista);
+Limitações e melhorias futuras
 
-// Delegação de eventos na lista
-document.getElementById("lista").addEventListener("click", (evento) => {
-  const botao = evento.target.closest("button");
-  if (!botao) return;
+O sistema ainda não faz:
 
-  const despesa = despesas.find((d) => d.id === Number(botao.dataset.id));
-  if (!despesa) return;
+Persistência dos dados. Ao recarregar a página, tudo se perde.
+Login ou autenticação de usuários.
+Integração com API real ou banco de dados.
+Edição completa de uma despesa. Só o status pode ser alterado.
+Exportação de relatórios.
+Notificações de contas a vencer.
 
-  if (botao.dataset.acao === "status") {
-    despesa.status = despesa.status === "Pendente" ? "Pago" : "Pendente";
-    atualizarTela();
-  } else if (botao.dataset.acao === "detalhes") {
-    mostrarDetalhes(despesa);
-  }
-});
+Com mais tempo, seria interessante adicionar:
 
-document.getElementById("fechar-detalhes").addEventListener("click", () => {
-  document.getElementById("detalhes").hidden = true;
-});
+Banco de dados ou localStorage para persistir os dados.
+Autenticação simples.
+Integração com uma API real.
+Gráficos de gastos por categoria.
+Níveis de acesso, como administrador e usuário comum.
 
-iniciar();
+Uso de IA
+
+Data: 07/10/2026
+Modelo: Assistente de IA
+Prompt: Revisar o código e sugerir melhorias de semântica e acessibilidade.
+Onde foi usado: Revisão do HTML e do JavaScript.
+
+Data: 07/10/2026
+Modelo: Assistente de IA
+Prompt: Ajuda para montar o README conforme o enunciado.
+Onde foi usado: Documentação.
+
+O código sugerido foi revisado e adaptado. As sugestões foram aplicadas apenas quando fizeram sentido para o projeto. Toda a lógica foi compreendida e testada antes da entrega.
