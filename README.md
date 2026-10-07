@@ -6,7 +6,7 @@ Nome do projeto: Controle de Despesas Pessoais
 Integrantes: Lavínia Beatriz
 Disciplina: Programação Web
 Unidade: I (front-end)
-Turma: [coloque sua turma aqui]
+Turma: Ciência da Computação - 6º período
 
 Descrição
 
