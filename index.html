@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Despesas</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Controle de Despesas</h1>
+    <p>Registre seus gastos e veja o que já foi pago.</p>
+  </header>
+
+  <main>
+    <p id="carregando" aria-live="polite">Carregando despesas...</p>
+
+    <section id="dashboard" aria-labelledby="titulo-dashboard" hidden>
+      <h2 id="titulo-dashboard">Resumo</h2>
+      <ul class="resumo">
+        <li>Total: <strong id="total"></strong></li>
+        <li>Pendentes: <strong id="pendentes"></strong></li>
+        <li>Pagas: <strong id="pagas"></strong></li>
+      </ul>
+    </section>
+
+    <section id="cadastro" aria-labelledby="titulo-cadastro">
+      <h2 id="titulo-cadastro">Nova despesa</h2>
+      <form id="formulario" novalidate>
+        <label for="descricao">Descrição</label>
+        <input type="text" id="descricao" aria-describedby="erro-descricao">
+        <p class="erro" id="erro-descricao" role="alert"></p>
+
+        <label for="valor">Valor (R$)</label>
+        <input type="number" id="valor" step="0.01" aria-describedby="erro-valor">
+        <p class="erro" id="erro-valor" role="alert"></p>
+
+        <label for="categoria">Categoria</label>
+        <select id="categoria" aria-describedby="erro-categoria">
+          <option value="">Selecione</option>
+          <option>Alimentação</option>
+          <option>Transporte</option>
+          <option>Lazer</option>
+          <option>Contas</option>
+        </select>
+        <p class="erro" id="erro-categoria" role="alert"></p>
+
+        <label for="pagamento">Forma de pagamento</label>
+        <select id="pagamento" aria-describedby="erro-pagamento">
+          <option value="">Selecione</option>
+          <option>Dinheiro</option>
+          <option>Pix</option>
+          <option>Cartão</option>
+        </select>
+        <p class="erro" id="erro-pagamento" role="alert"></p>
+
+        <label for="status">Status</label>
+        <select id="status" aria-describedby="erro-status">
+          <option value="">Selecione</option>
+          <option>Pendente</option>
+          <option>Pago</option>
+        </select>
+        <p class="erro" id="erro-status" role="alert"></p>
+
+        <label for="data">Data</label>
+        <input type="date" id="data" aria-describedby="erro-data">
+        <p class="erro" id="erro-data" role="alert"></p>
+
+        <button type="submit">Cadastrar</button>
+      </form>
+    </section>
+
+    <section id="listagem" aria-labelledby="titulo-lista" hidden>
+      <h2 id="titulo-lista">Despesas</h2>
+
+      <label for="busca">Buscar por descrição</label>
+      <input type="text" id="busca">
+
+      <label for="filtro-status">Filtrar por status</label>
+      <select id="filtro-status">
+        <option value="">Todos</option>
+        <option>Pendente</option>
+        <option>Pago</option>
+      </select>
+
+      <ul id="lista"></ul>
+    </section>
+
+    <section id="detalhes" aria-labelledby="titulo-detalhes" hidden>
+      <h2 id="titulo-detalhes">Detalhes da despesa</h2>
+      <dl id="detalhes-lista"></dl>
+      <button type="button" id="fechar-detalhes">Fechar</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Projeto AV1 - Programação Web, Unidade I</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
